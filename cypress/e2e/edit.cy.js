@@ -14,6 +14,8 @@ describe('Edit functionality', () => {
             // Navigate to the Manage page
             cy.contains('a', 'Manage').click();
             cy.url().should('include', '/manage');
+
+            cy.wait(5000);
     
             // Click the Add button
             cy.contains('button', 'Add').click();
@@ -22,6 +24,8 @@ describe('Edit functionality', () => {
             cy.contains('a', 'Consult').click();
             // If student is successfully added
             cy.url().should('include', '/consult');
+
+            cy.wait(5000);
                     
             // Verify if the added student is displayed in the table on the consultation page
             cy.get('.p-datatable-tbody tr').should('have.length.above', 0).then(($rows) => {
@@ -46,6 +50,8 @@ describe('Edit functionality', () => {
         cy.contains('a', 'Manage').click();
         cy.url().should('include', '/manage');
 
+        cy.wait(5000);
+
         // Click the Add button
         cy.contains('button', 'Add').click();
 
@@ -53,6 +59,8 @@ describe('Edit functionality', () => {
         cy.contains('a', 'Consult').click();
         // If student is successfully added
         cy.url().should('include', '/consult');
+
+        cy.wait(5000);
                 
         // Verify if the added student is displayed in the table on the consultation page
         cy.get('.p-datatable-tbody tr').should('have.length.above', 0).then(($rows) => {
@@ -84,6 +92,8 @@ describe('Edit functionality', () => {
             // Click the "Save" button
             cy.contains('button', 'Save').click({force:true});
 
+            cy.wait(5000);
+
             // Wait for the alert and assert its content
             cy.on('window:alert', (message) => {
                 expect(message).to.equal('Category successfully saved!');
@@ -104,6 +114,8 @@ describe('Edit functionality', () => {
         cy.contains('a', 'Manage').click();
         cy.url().should('include', '/manage');
 
+        cy.wait(5000);
+
         // Click the Add button
         cy.contains('button', 'Add').click();
 
@@ -111,6 +123,8 @@ describe('Edit functionality', () => {
         cy.contains('a', 'Consult').click();
         // If student is successfully added
         cy.url().should('include', '/consult');
+
+        cy.wait(5000);
                 
         // Verify if the added student is displayed in the table on the consultation page
         cy.get('.p-datatable-tbody tr').should('have.length.above', 0).then(($rows) => {
@@ -126,6 +140,8 @@ describe('Edit functionality', () => {
     
             // Click the "Save" button without filling any fields
             cy.contains('button', 'Save').click({force:true});
+
+            cy.wait(5000);
     
             // Wait for the alert and assert its content
             cy.on('window:alert', (message) => {

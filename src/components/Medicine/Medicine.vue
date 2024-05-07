@@ -185,7 +185,7 @@
                   @click="closeAddMedicineDialog"
                 />
                 <Button
-                  label="Add"
+                  label="Save"
                   icon="pi pi-plus"
                   class="p-button-primary"
                   type="submit"
@@ -358,6 +358,7 @@ const openAddMedicineDialog = () => {
 };
 const closeAddMedicineDialog = () => {
   isAddMedicineDialogOpen.value = false;
+  alert("Adding medicine has been canceled.");
 };
 const saveAddedMedicine = () => {
   const payload = { ...newMedicine.value };
@@ -395,6 +396,7 @@ const openEditMedicineDialog = (val) => {
 };
 const closeEditMedicineDialog = () => {
   isEditMedicineDialogOpen.value = false;
+  alert("Editing medicine has been canceled.")
 };
 const saveEditedMedicine = () => {
   const payload = { ...editedMedicine.value };

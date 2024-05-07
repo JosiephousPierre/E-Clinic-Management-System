@@ -14,6 +14,8 @@ describe('Search functionality', () => {
         cy.contains('a', 'Manage').click();
         cy.url().should('include', '/manage');
 
+        cy.wait(5000);
+
         // Extract a student ID from the table and use it as the search term
         cy.get('.p-datatable-tbody tr:first-child td:first-child').invoke('text').then((studentId) => {
             // Click on the search input field and type the student ID
@@ -39,6 +41,8 @@ describe('Search functionality', () => {
         // Navigate to the Manage page
         cy.contains('a', 'Manage').click();
         cy.url().should('include', '/manage');
+
+        cy.wait(5000);
     
         // Click on the search input field and type the non-existing student ID
         cy.get('.p-inputtext').should('be.visible').eq(0).click().type(nonExistingStudentId);

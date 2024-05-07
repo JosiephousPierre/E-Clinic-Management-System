@@ -46,7 +46,7 @@ if (id.value === '' || password.value === '') {
   const isAuthenticated = userData.find((user) => user.id === id.value && user.password === password.value);
   if (isAuthenticated) {
     // Replace useToast with an alternative from Vue
-    errorMessage.value = 'Login successful!';
+    //errorMessage.value = 'Login successful!';
     alert('Login successful!');
     router.push("/home");
   } else {

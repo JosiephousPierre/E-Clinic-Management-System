@@ -124,7 +124,7 @@
                   @click="closeAddSymptomDialog"
                 />
                 <Button
-                  label="Add"
+                  label="Save"
                   icon="pi pi-plus"
                   class="p-button-primary"
                   type="submit"
@@ -185,7 +185,7 @@
                   @click="closeEditSymptomDialog"
                 />
                 <Button
-                  label="Add"
+                  label="Save"
                   icon="pi pi-plus"
                   class="p-button-primary"
                   type="submit"
@@ -247,6 +247,7 @@ const openAddSymptomDialog = () => {
 };
 const closeAddSymptomDialog = () => {
   isAddSymptomDialogOpen.value = false;
+  alert("Adding symptom has been canceled.");
 };
 const saveAddedSymptom = () => {
   const payload = { ...newSymptom.value };
@@ -267,6 +268,7 @@ const saveAddedSymptom = () => {
     .catch((error) => {
       console.error("Error adding symptom:", error);
     });
+
 };
 
 /** Edit Symptom */
@@ -278,6 +280,7 @@ const openEditSymptomDialog = (val) => {
 };
 const closeEditSymptomDialog = () => {
   isEditSymptomDialogOpen.value = false;
+  alert("Editing symptom has been cancel.")
 };
 const saveEditedSymptom = () => {
   const payload = { ...editedSymptom.value };
