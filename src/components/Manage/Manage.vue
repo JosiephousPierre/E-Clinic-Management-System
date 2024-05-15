@@ -2,11 +2,31 @@
   <div class="bgImg">
     <div class="container">
       <h1>Manage Patients</h1>
-      <InputText
-        style="margin-bottom: 15px; width: 300px"
-        v-model="searchQuery"
-        placeholder="Search"
-      />
+      <div
+        style="
+          margin-bottom: 10px;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <InputText
+          style="margin-bottom: 15px; width: 300px"
+          v-model="searchQuery"
+          placeholder="Search"
+        />
+
+        <Button
+          label="Add"
+          icon="pi pi-plus"
+          class="p-button-primary"
+          @click="openAddManageDialog"
+        />
+        
+
+      </div>
+
       <DataTable
         :value="filteredStudents"
         paginator
@@ -54,6 +74,91 @@
           </template>
         </Column>
       </DataTable>
+
+      <!-- Add Dialog -->
+      <Dialog
+        :pt="{
+          mask: {
+            style: 'backdrop-filter: blur(2px)',
+          },
+        }"
+        style="padding: 0"
+        v-if="isAddManageDialogOpen"
+        visible
+        @onHide="closeAddManageDialog"
+        :closable="false"
+      >
+        <template #container="{ closeCallback }">
+          <div
+            style="background-color: #fd9bd8; padding: 10px; border-radius: 5px"
+          >
+            <h2 style="margin: 0; color: white">Add Student</h2>
+            <form @submit.prevent="saveAddedManage">
+              <div style="padding: 1rem">
+                <div>
+                  <div
+                    style="
+                      flex: 1;
+                      display: flex;
+                      flex-direction: column;
+                      margin-bottom: 10px;
+                    "
+                  > 
+                    <label for="drugName">Student First Name:</label>
+                    <InputText id="drugName" v-model="newManage.student_Fname" />
+                  </div>
+
+                  <div
+                    style="
+                      flex: 1;
+                      display: flex;
+                      flex-direction: column;
+                      margin-bottom: 10px;
+                    "
+                  > 
+                    <label for="drugName">Student Last Name:</label>
+                    <InputText id="drugName" v-model="newManage.student_Lname" />
+                  </div>
+
+                  <div
+                    style="
+                      flex: 1;
+                      display: flex;
+                      flex-direction: column;
+                      margin-bottom: 10px;
+                    "
+                  > 
+                    <label for="drugName">Course:</label>
+                    <InputText id="drugName" v-model="newManage.course" />
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  margin: 10px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 4px;
+                "
+              >
+                <Button
+                  label="Cancel"
+                  icon="pi pi-times"
+                  class="p-button-secondary"
+                  @click="closeAddManageDialog"
+                />
+                <Button
+                  label="Save"
+                  icon="pi pi-plus"
+                  class="p-button-primary"
+                  type="submit"
+                />
+              </div>
+            </form>
+          </div>
+        </template>
+      </Dialog>
       <div
         v-if="filteredStudents.length === 0"
         style="text-align: center; margin-top: 10px"
@@ -68,8 +173,10 @@
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
+import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import { ref, computed, onMounted } from "vue";
+import { formatToUrlEncoded } from "../../helpers/formatter";
 import { useRouter } from "vue-router";
 import axiosClient from "../../utils/axiosClient";
 import { useConsultStore } from "../../store/consult";
@@ -95,6 +202,45 @@ const fetchStudents = async () => {
     })
     .finally(() => {
       isLoading.value = false;
+    });
+};
+
+/** Add Manage */
+const isAddManageDialogOpen = ref(false);
+const newManage = ref({});
+const openAddManageDialog = () => {
+  isAddManageDialogOpen.value = true;
+};
+const closeAddManageDialog = () => {
+  isAddManageDialogOpen.value = false;
+  alert("Adding Manage has been canceled.");
+};
+const saveAddedManage = () => {
+  const payload = { ...newManage.value };
+  if (
+    !payload.student_Lname ||
+    !payload.student_Fname ||
+    !payload.course
+  ) {
+    alert("Please fill in all fields before saving.");
+    return;
+  }
+
+  payload.nurseID = 2; // Hardcode
+  const formData = formatToUrlEncoded(payload);
+
+  axiosClient
+    .post("/manage/", formData)
+    .then((res) => {
+      alert("Patient was successfully added.");
+      closeAddManageDialog();
+      router.go();
+    })
+    .catch((error) => {
+      console.error("Error adding patient:", error.response.data.detail);
+
+      // Will print the error message if the add consult med fails
+      alert(error.response.data.detail);
     });
 };
 

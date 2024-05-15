@@ -7,6 +7,8 @@ import Login from "../components/Login.vue";
 import Manage from "../components/Manage/Manage.vue";
 import Medicine from "../components/Medicine/Medicine.vue";
 import Symptoms from "../components/Symptoms/Symptoms.vue";
+import Consulted_med from "../components/Consulted_med/Consulted_med.vue";
+import Consulted_illness from "../components/Consulted_illness/Consulted_illness.vue";
 
 const routes = [
   {
@@ -48,6 +50,16 @@ const routes = [
     path: "/symptoms",
     name: "Symptoms",
     component: Symptoms,
+  },
+  {
+    path: "/consulted_med",
+    name: "Consulted Medication",
+    component: Consulted_med,
+  },
+  {
+    path: "/consulted_illness",
+    name: "Consulted Illness",
+    component: Consulted_illness,
   },
 ];
 

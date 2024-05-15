@@ -29,6 +29,16 @@ const items = [
     to: "/medicine",
   },
   {
+    label: "Consulted Medication",
+    icon: "pi pi-fw pi-list",
+    to: "/consulted_med",
+  },
+  {
+    label: "Consulted Illness",
+    icon: "pi pi-fw pi-list",
+    to: "/consulted_illness",
+  },
+  {
     label: "Symptoms",
     icon: "pi pi-fw pi-list",
     to: "/symptoms",

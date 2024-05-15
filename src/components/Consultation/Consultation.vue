@@ -14,6 +14,7 @@ import {
   formatToUrlEncoded,
 } from "../../helpers/formatter";
 import axiosClient from "../../utils/axiosClient";
+import moment from 'moment-timezone';
 
 const router = useRouter();
 
@@ -30,6 +31,24 @@ const closeAddConsultationDialog = () => {
   isAddConsultationDialogOpen.value = false;
 };
 
+let philippinesTime = moment.tz("Asia/Manila").format(); // Initial value
+
+function updatePhilippinesTime() {
+  philippinesTime = moment.tz("Asia/Manila").format();
+}
+
+setInterval(updatePhilippinesTime, 1000); // Update every second
+
+// Same for philippinesTimeOut
+let philippinesTimeOut = moment.tz("Asia/Manila").format(); // Initial value
+
+function updatePhilippinesTimeOut() {
+  philippinesTimeOut = moment.tz("Asia/Manila").format();
+}
+
+setInterval(updatePhilippinesTimeOut, 1000); // Update every second
+
+
 /** Save New Consultation */
 const newConsultation = ref({});
 const saveAddedConsultation = () => {
@@ -39,12 +58,16 @@ const saveAddedConsultation = () => {
     !newConsultation.value.course ||
     !newConsultation.value.description ||
     !newConsultation.value.medicine ||
-    !newConsultation.value.date ||
-    !newConsultation.value.timeIn
+    !newConsultation.value.date
+    // !newConsultation.value.timeIn
   ) {
     alert("Please fill in all fields before saving.");
     return;
   }
+
+  // Set the current time in the Philippines for the timeIn field
+  newConsultation.value.timeIn = philippinesTime.toString();
+
   storeConsult.addConsultation(newConsultation.value);
   alert("Successfully Added");
   closeAddConsultationDialog();
@@ -69,13 +92,16 @@ const saveEditedConsultation = () => {
     !consultationToUpdate.value.course ||
     !consultationToUpdate.value.description ||
     !consultationToUpdate.value.medicine ||
-    !consultationToUpdate.value.date ||
-    !consultationToUpdate.value.timeIn
+    !consultationToUpdate.value.date
+    // !consultationToUpdate.value.timeIn
   ) {
     alert("Please fill in all fields before saving.");
     return;
   }
 
+  console.log('SAVE UPDATEEEEEEEEEE')
+    // Set the current time in the Philippines for the timeIn field
+  consultationToUpdate.value.timeIn = philippinesTime.toString();
   storeConsult.updateConsultation(consultationToUpdate.value);
   alert("Consultation successfully saved!");
   closeEditConsultationDialog();
@@ -91,7 +117,8 @@ const deleteConsultation = (id) => {
 const isCheckoutConsultationDialogOpen = ref(false);
 const openCheckoutConsultationDialog = (val) => {
   storeConsult.addConsultationForCheckout(val.data);
-  isCheckoutConsultationDialogOpen.value = true;
+  saveCheckoutConsultation()
+  // isCheckoutConsultationDialogOpen.value = true;
 };
 const closeCheckoutConsultationDialog = () => {
   storeConsult.resetConsultationForCheckout();
@@ -100,32 +127,40 @@ const closeCheckoutConsultationDialog = () => {
 
 /** Checkout Consultation */
 const saveCheckoutConsultation = () => {
+  // console.log('TIME IN NOW', philippinesTimeOut);
+  // console.log('TIME OUT NOW', philippinesTimeOut);
   const checkoutConsultation = { ...storeConsult.getConsultationForCheckout };
   if (
     !checkoutConsultation.nurse_Id ||
-    !checkoutConsultation.student_Id ||
+    // !checkoutConsultation.student_Id ||
     !checkoutConsultation.student_Lname ||
     !checkoutConsultation.student_Fname ||
     !checkoutConsultation.course ||
     !checkoutConsultation.description ||
     !checkoutConsultation.medicine ||
     !checkoutConsultation.date ||
-    !checkoutConsultation.timeIn ||
-    !checkoutConsultation.checkOut
+    !checkoutConsultation.timeIn
+    // !checkoutConsultation.checkOut
   ) {
     alert("Please fill in all fields before checking out.");
     closeCheckoutConsultationDialog();
     return;
   }
   const payload = {
-    student_Id: checkoutConsultation.student_Id,
+    // student_Id: checkoutConsultation.student_Id,
+    student_Id: 2, 
+    /* Hardcode ko po muna kase wala po dito ung pag extract ng student_ID, 
+    baka po kase kapag may ginalawa po akong  iba masira kopo. I'll let you handle the consultation page napo */
     nurseID: checkoutConsultation.nurse_Id,
     illness: checkoutConsultation.description,
     medicine: checkoutConsultation.medicine,
     date: checkoutConsultation.date,
     time_In: checkoutConsultation.timeIn,
-    check_Out: checkoutConsultation.checkOut,
+    check_Out: philippinesTimeOut.toString(),
   };
+
+  console.log('SAVEEEEEEEE SHEESHH', payload);
+  console.log('SAVEEEEEEEE SHEESHH TIME', philippinesTimeOut.toString())
 
   const formData = formatToUrlEncoded(payload);
   axiosClient
@@ -139,6 +174,7 @@ const saveCheckoutConsultation = () => {
     .catch((error) => {
       console.error("Error adding consult:", error);
     });
+
 };
 </script>
 
@@ -346,6 +382,7 @@ const saveCheckoutConsultation = () => {
                       v-model="consultationToUpdate.date"
                     />
                   </div>
+                  <!--
                   <div style="flex: 1; display: flex; flex-direction: column">
                     <label for="editedTime">Time In:</label>
                     <Calendar
@@ -356,7 +393,8 @@ const saveCheckoutConsultation = () => {
                       iconDisplay="input"
                       timeOnly
                     ></Calendar>
-                  </div>
+                  </div> 
+                  -->
                 </div>
               </div>
               <div
@@ -454,7 +492,8 @@ const saveCheckoutConsultation = () => {
                       showIcon
                     />
                   </div>
-                  <div style="flex: 1; display: flex; flex-direction: column">
+                  <!--
+                  <div style="flex: 1; display: flex; flex-direction: column"> 
                     <label for="newTimeIn">Time In:</label>
                     <Calendar
                       id="newTimeIn"
@@ -465,6 +504,7 @@ const saveCheckoutConsultation = () => {
                       timeOnly
                     ></Calendar>
                   </div>
+                  -->
                 </div>
               </div>
               <div
@@ -519,7 +559,6 @@ const saveCheckoutConsultation = () => {
                     <label for="editedcheckOut">Check-out:</label>
                     <Calendar
                       id="editedcheckOut"
-                      v-model="storeConsult.consultationForCheckout.checkOut"
                       hourFormat="12"
                       showIcon
                       iconDisplay="input"
