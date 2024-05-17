@@ -73,7 +73,7 @@
             />
           </template>
         </Column>
-      </DataTable>
+      </DataTable> 
 
       <!-- Add Dialog -->
       <Dialog

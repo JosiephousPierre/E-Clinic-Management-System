@@ -7,7 +7,7 @@ import { ref } from 'vue';
 import axios from 'axios';
 
 const newCategory = ref({
-  name: '',
+  name: '', 
 });
 
 const loading = ref(false);
