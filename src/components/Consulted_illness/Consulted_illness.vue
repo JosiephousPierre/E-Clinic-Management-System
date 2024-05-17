@@ -12,7 +12,7 @@
           :value="consultedillnesslist"
           paginator
           :rows="5"
-          :rowsPerPageOptions="[5, 10, 20, 50]"
+          :rowsPerPageOptions="[5, 10, 20, 50]" 
           stripedRows
           tableStyle="min-width: 80rem;"
         >
