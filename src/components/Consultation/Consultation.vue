@@ -147,8 +147,8 @@ const saveCheckoutConsultation = () => {
     return;
   }
   const payload = {
-    // student_Id: checkoutConsultation.student_Id,
-    student_Id: 2, 
+    student_Id: checkoutConsultation.student_Id,
+    //student_Id: 2, 
     /* Hardcode ko po muna kase wala po dito ung pag extract ng student_ID, 
     baka po kase kapag may ginalawa po akong  iba masira kopo. I'll let you handle the consultation page napo */
     nurseID: checkoutConsultation.nurse_Id,
